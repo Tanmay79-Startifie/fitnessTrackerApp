@@ -39,7 +39,15 @@ def print_test_result(test_name, success, details=""):
 
 def make_request(method, endpoint, data=None, headers=None, auth_required=True):
     """Make HTTP request with proper error handling"""
-    url = f"{API_BASE}{endpoint}"
+    # Handle root endpoint specially
+    if endpoint == "":
+        url = BACKEND_URL + "/"
+    elif endpoint.startswith("/") and not endpoint.startswith("/api"):
+        # For non-API endpoints like /health
+        url = BACKEND_URL + endpoint
+    else:
+        # For API endpoints
+        url = f"{API_BASE}{endpoint}"
     
     # Add authorization header if required
     if auth_required and access_token:
