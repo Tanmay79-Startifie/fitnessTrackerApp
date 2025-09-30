@@ -1005,6 +1005,10 @@ async def get_user_profile(request: Request):
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
     
+    # Remove MongoDB ObjectId to avoid serialization issues
+    if "_id" in profile:
+        del profile["_id"]
+    
     return profile
 
 # Include the router in the main app
