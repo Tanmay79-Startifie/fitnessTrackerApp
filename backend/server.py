@@ -36,6 +36,34 @@ app = FastAPI(title="AI Fitness Tracker API", version="1.0.0")
 # Security
 security = HTTPBearer()
 
+# Database initialization
+async def initialize_database():
+    """Initialize Supabase database with required schema"""
+    try:
+        # Read the schema file
+        schema_path = ROOT_DIR.parent / 'supabase-schema.sql'
+        with open(schema_path, 'r') as f:
+            schema_sql = f.read()
+        
+        # Execute schema using service role key for admin operations
+        service_supabase = create_client(supabase_url, supabase_service_key)
+        
+        # Split and execute SQL statements
+        statements = [stmt.strip() for stmt in schema_sql.split(';') if stmt.strip()]
+        
+        for statement in statements:
+            if statement:
+                try:
+                    service_supabase.rpc('exec_sql', {'sql': statement}).execute()
+                except Exception as e:
+                    print(f"Error executing statement: {statement[:100]}... Error: {e}")
+        
+        print("Database schema initialized successfully!")
+        return True
+    except Exception as e:
+        print(f"Database initialization failed: {e}")
+        return False
+
 # ==================== MODELS ====================
 
 class UserCreate(BaseModel):
