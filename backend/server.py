@@ -962,6 +962,8 @@ async def update_user_progress(user_id: str, task_id: str):
     if not progress:
         progress = Progress(user_id=user_id, date=today).dict()
         await db.progress.insert_one(progress)
+        # Retrieve the inserted document to get the current state
+        progress = await db.progress.find_one({"user_id": user_id, "date": today})
     
     # Update based on task type
     update_data = {}
