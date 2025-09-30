@@ -264,8 +264,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Backend API Testing - COMPLETED ✅"
-    - "End-to-End Authentication Flow - COMPLETED ✅"
+    - "Supabase Backend Integration Testing"
+    - "Authentication System with Supabase Auth"
+    - "Onboarding API with Supabase + Gemini AI"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
