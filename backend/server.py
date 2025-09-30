@@ -983,9 +983,9 @@ async def get_progress_summary(request: Request):
     }).to_list(10)
     
     # Calculate streaks and stats
-    total_workouts = sum(1 for p in progress_data if p.get("workouts_minutes", 0) > 0)
-    total_meals = sum(p.get("meals_completed", 0) for p in progress_data)
-    avg_water = sum(p.get("water_ml", 0) for p in progress_data) / max(len(progress_data), 1)
+    total_workouts = sum(1 for p in progress_data if (p.get("workouts_minutes") or 0) > 0)
+    total_meals = sum((p.get("meals_completed") or 0) for p in progress_data)
+    avg_water = sum((p.get("water_ml") or 0) for p in progress_data) / max(len(progress_data), 1)
     
     return {
         "weekly_workouts": total_workouts,
