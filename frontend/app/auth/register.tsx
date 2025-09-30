@@ -64,6 +64,7 @@ export default function Register() {
   const handleRegister = async () => {
     console.log('=== REGISTRATION STARTED ===');
     console.log('Form data:', formData);
+    console.log('Environment URL:', process.env.EXPO_PUBLIC_BACKEND_URL);
     
     if (!validateForm()) {
       console.log('Validation failed');
