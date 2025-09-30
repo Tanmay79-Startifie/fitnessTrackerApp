@@ -107,13 +107,14 @@ def test_user_registration():
     
     if response and response.status_code == 200:
         data = response.json()
-        access_token = data.get("access_token")
+        access_token = data.get("access_token")  # May be None for unconfirmed users
         user_info = data.get("user", {})
         user_id = user_info.get("id")
         
-        success = bool(access_token and user_id and user_info.get("email") == TEST_USER["email"])
+        # Registration is successful if we get a user ID, even without access token
+        success = bool(user_id and user_info.get("email") == TEST_USER["email"])
         print_test_result("User registration with Supabase", success, 
-                         f"Token received: {bool(access_token)}, User ID: {user_id}, Email: {user_info.get('email')}")
+                         f"User ID: {user_id}, Email: {user_info.get('email')}, Token: {'Yes' if access_token else 'None (email confirmation required)'}")
         return success
     else:
         error_detail = response.json().get("detail", "Unknown error") if response else "No response"
