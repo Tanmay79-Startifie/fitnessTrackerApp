@@ -86,11 +86,18 @@ export default function Welcome() {
         <TouchableOpacity 
           style={[styles.button, styles.googleButton]} 
           onPress={handleGoogleSignIn}
+          disabled={loading}
         >
-          <Ionicons name="logo-google" size={20} color="#ffffff" />
-          <Text style={[styles.buttonText, styles.googleButtonText]}>
-            Continue with Google
-          </Text>
+          {loading ? (
+            <ActivityIndicator color="#ffffff" />
+          ) : (
+            <>
+              <Ionicons name="logo-google" size={20} color="#ffffff" />
+              <Text style={[styles.buttonText, styles.googleButtonText]}>
+                Continue with Google
+              </Text>
+            </>
+          )}
         </TouchableOpacity>
 
         <View style={styles.dividerContainer}>
