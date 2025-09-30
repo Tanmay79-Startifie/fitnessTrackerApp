@@ -62,26 +62,41 @@ export default function Register() {
   };
 
   const handleRegister = async () => {
-    if (!validateForm()) return;
+    console.log('=== REGISTRATION STARTED ===');
+    console.log('Form data:', formData);
+    
+    if (!validateForm()) {
+      console.log('Validation failed');
+      return;
+    }
 
+    console.log('Validation passed, starting registration...');
     setLoading(true);
     try {
+      const payload = {
+        email: formData.email.toLowerCase(),
+        password: formData.password,
+        full_name: formData.fullName,
+        timezone: 'Asia/Kolkata',
+      };
+      
+      console.log('Registration payload:', payload);
+      console.log('API URL:', `${EXPO_PUBLIC_BACKEND_URL}/api/auth/register`);
+
       const response = await fetch(`${EXPO_PUBLIC_BACKEND_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: formData.email.toLowerCase(),
-          password: formData.password,
-          full_name: formData.fullName,
-          timezone: 'Asia/Kolkata',
-        }),
+        body: JSON.stringify(payload),
       });
 
+      console.log('Registration response status:', response.status);
       const data = await response.json();
+      console.log('Registration response data:', data);
 
       if (response.ok) {
+        console.log('Registration successful!');
         // Store token and user data
         await AsyncStorage.setItem('session_token', data.access_token);
         await AsyncStorage.setItem('user_data', JSON.stringify(data.user));
@@ -92,11 +107,15 @@ export default function Register() {
           [
             {
               text: 'OK',
-              onPress: () => router.replace('/onboarding'),
+              onPress: () => {
+                console.log('Navigating to onboarding...');
+                router.replace('/onboarding');
+              },
             },
           ]
         );
       } else {
+        console.log('Registration failed:', data);
         Alert.alert('Error', data.detail || 'Registration failed');
       }
     } catch (error) {
