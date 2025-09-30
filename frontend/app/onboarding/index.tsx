@@ -146,16 +146,23 @@ export default function OnboardingWizard() {
   };
 
   const handleSubmit = async () => {
-    console.log('=== ONBOARDING SUBMIT STARTED ===');
+    console.log('=== SUPABASE ONBOARDING SUBMIT STARTED ===');
     console.log('Current data:', data);
+    console.log('Current user:', user);
     
+    if (!user) {
+      Alert.alert('Error', 'User not authenticated. Please log in again.');
+      router.replace('/auth/welcome');
+      return;
+    }
+
     setLoading(true);
     try {
-      const token = await AsyncStorage.getItem('session_token');
-      console.log('Token found:', !!token);
+      // Get the current session to get the access token
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!session?.access_token) {
+        throw new Error('No valid session found');
       }
 
       const onboardingPayload = {
@@ -165,22 +172,17 @@ export default function OnboardingWizard() {
         height_cm: data.heightCm,
         weight_kg: data.weightKg,
         activity_level: data.activityLevel,
-        steps_per_day: data.stepsPerDay,
-        exercise_frequency: data.exerciseFrequency,
-        sleep_hours: data.sleepHours,
-        water_intake: data.waterIntake,
         diet_type: data.dietType,
-        fruits_vegetables: data.fruitsVegetables,
+        allergies: data.allergies,
         smoking_alcohol: data.smokingAlcohol,
         stress_level: data.stressLevel,
-        allergies: data.allergies,
-        cuisine_preference: data.cuisinePreference,
         primary_goal: data.primaryGoal,
         equipment_access: data.equipmentAccess,
-        preferred_workout_time: data.preferredWorkoutTime,
         wake_time: data.wakeTime,
         bed_time: data.bedTime,
         training_days: data.trainingDays,
+        preferred_workout_time: data.preferredWorkoutTime,
+        cuisine_preference: data.cuisinePreference,
       };
 
       console.log('Onboarding payload:', onboardingPayload);
@@ -190,7 +192,7 @@ export default function OnboardingWizard() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(onboardingPayload),
       });
