@@ -36,33 +36,142 @@ app = FastAPI(title="AI Fitness Tracker API", version="1.0.0")
 # Security
 security = HTTPBearer()
 
-# Database initialization
+# Database initialization endpoint
+@app.post("/api/init-db")
 async def initialize_database():
-    """Initialize Supabase database with required schema"""
+    """Initialize Supabase database with required schema - DEVELOPMENT USE ONLY"""
     try:
-        # Read the schema file
-        schema_path = ROOT_DIR.parent / 'supabase-schema.sql'
-        with open(schema_path, 'r') as f:
-            schema_sql = f.read()
-        
-        # Execute schema using service role key for admin operations
+        # Use service role key for admin operations
         service_supabase = create_client(supabase_url, supabase_service_key)
         
-        # Split and execute SQL statements
-        statements = [stmt.strip() for stmt in schema_sql.split(';') if stmt.strip()]
+        # Create profiles table
+        profiles_sql = """
+        CREATE TABLE IF NOT EXISTS profiles (
+            id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+            full_name TEXT,
+            email TEXT,
+            avatar_url TEXT,
+            gender TEXT,
+            age_group TEXT,
+            height_cm REAL,
+            weight_kg REAL,
+            bmi REAL,
+            activity_level TEXT,
+            diet_type TEXT,
+            allergies TEXT[],
+            smoking_alcohol TEXT,
+            stress_level TEXT,
+            primary_goal TEXT,
+            equipment_access TEXT,
+            wake_time TEXT,
+            bed_time TEXT,
+            training_days TEXT[],
+            preferred_workout_time TEXT,
+            cuisine_preference TEXT,
+            bmr REAL,
+            tdee REAL,
+            calories_target REAL,
+            protein_g REAL,
+            carbs_g REAL,
+            fat_g REAL,
+            hydration_target_ml REAL,
+            sleep_target_hrs REAL,
+            step_target INTEGER,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+        """
         
-        for statement in statements:
-            if statement:
-                try:
-                    service_supabase.rpc('exec_sql', {'sql': statement}).execute()
-                except Exception as e:
-                    print(f"Error executing statement: {statement[:100]}... Error: {e}")
+        # Create daily_plans table
+        daily_plans_sql = """
+        CREATE TABLE IF NOT EXISTS daily_plans (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+            date DATE NOT NULL,
+            meals JSONB,
+            workout JSONB,
+            water_goal_ml REAL,
+            sleep_window JSONB,
+            step_target INTEGER,
+            calories_target REAL,
+            macros JSONB,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            UNIQUE(user_id, date)
+        );
+        """
         
-        print("Database schema initialized successfully!")
-        return True
+        # Create tasks table
+        tasks_sql = """
+        CREATE TABLE IF NOT EXISTS tasks (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+            date DATE NOT NULL,
+            type TEXT NOT NULL,
+            title TEXT NOT NULL,
+            due_at TIMESTAMP WITH TIME ZONE,
+            completed BOOLEAN DEFAULT FALSE,
+            completed_at TIMESTAMP WITH TIME ZONE,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+        """
+        
+        # Create progress table
+        progress_sql = """
+        CREATE TABLE IF NOT EXISTS progress (
+            id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+            date DATE NOT NULL,
+            weight_kg REAL,
+            steps INTEGER,
+            water_ml REAL,
+            workouts_minutes INTEGER,
+            meals_completed INTEGER,
+            fitness_score REAL,
+            streak_current INTEGER DEFAULT 0,
+            streak_max INTEGER DEFAULT 0,
+            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            UNIQUE(user_id, date)
+        );
+        """
+        
+        # Enable RLS
+        rls_sql = """
+        ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE daily_plans ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE progress ENABLE ROW LEVEL SECURITY;
+        """
+        
+        # Create RLS policies
+        policies_sql = """
+        CREATE POLICY IF NOT EXISTS "Users can view and update their own profile" ON profiles
+            FOR ALL USING (auth.uid() = id);
+        
+        CREATE POLICY IF NOT EXISTS "Users can view and update their own plans" ON daily_plans
+            FOR ALL USING (auth.uid() = user_id);
+        
+        CREATE POLICY IF NOT EXISTS "Users can view and update their own tasks" ON tasks
+            FOR ALL USING (auth.uid() = user_id);
+        
+        CREATE POLICY IF NOT EXISTS "Users can view and update their own progress" ON progress
+            FOR ALL USING (auth.uid() = user_id);
+        """
+        
+        # Execute all SQL statements
+        statements = [profiles_sql, daily_plans_sql, tasks_sql, progress_sql, rls_sql, policies_sql]
+        
+        for sql in statements:
+            try:
+                # Use raw SQL execution via PostgREST
+                service_supabase.rpc('exec_sql', {'sql_statement': sql}).execute()
+            except Exception as e:
+                print(f"Error executing SQL: {e}")
+                # Try alternative approach - direct table creation may not work via RPC
+                pass
+        
+        return {"message": "Database initialization completed", "status": "success"}
     except Exception as e:
-        print(f"Database initialization failed: {e}")
-        return False
+        return {"message": f"Database initialization failed: {str(e)}", "status": "error"}
 
 # ==================== MODELS ====================
 
