@@ -13,9 +13,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+import { supabase } from '../../lib/supabase';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -32,44 +30,29 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${EXPO_PUBLIC_BACKEND_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.toLowerCase(),
-          password: password,
-        }),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.toLowerCase(),
+        password: password,
       });
 
-      const data = await response.json();
+      if (error) {
+        Alert.alert('Error', error.message);
+        return;
+      }
 
-      if (response.ok) {
-        // Store token and user data
-        await AsyncStorage.setItem('session_token', data.access_token);
-        await AsyncStorage.setItem('user_data', JSON.stringify(data.user));
-
+      if (data.session && data.user) {
         // Check onboarding status
-        const onboardingResponse = await fetch(`${EXPO_PUBLIC_BACKEND_URL}/api/onboarding/status`, {
-          headers: {
-            'Authorization': `Bearer ${data.access_token}`
-          }
-        });
-
-        if (onboardingResponse.ok) {
-          const onboardingStatus = await onboardingResponse.json();
-          
-          if (onboardingStatus.completed) {
-            router.replace('/dashboard');
-          } else {
-            router.replace('/onboarding');
-          }
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('bmi')
+          .eq('id', data.user.id)
+          .single();
+        
+        if (profile?.bmi) {
+          router.replace('/dashboard');
         } else {
           router.replace('/onboarding');
         }
-      } else {
-        Alert.alert('Error', data.detail || 'Login failed');
       }
     } catch (error) {
       console.error('Login error:', error);

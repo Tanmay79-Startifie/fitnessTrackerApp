@@ -14,9 +14,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'https://kotlin-fitness.preview.emergentagent.com';
+import { supabase } from '../../lib/supabase';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -62,9 +60,8 @@ export default function Register() {
   };
 
   const handleRegister = async () => {
-    console.log('=== REGISTRATION STARTED ===');
+    console.log('=== SUPABASE REGISTRATION STARTED ===');
     console.log('Form data:', formData);
-    console.log('Environment URL:', process.env.EXPO_PUBLIC_BACKEND_URL);
     
     if (!validateForm()) {
       console.log('Validation failed');
@@ -73,34 +70,50 @@ export default function Register() {
 
     console.log('Validation passed, starting registration...');
     setLoading(true);
+    
     try {
-      const payload = {
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email.toLowerCase(),
         password: formData.password,
-        full_name: formData.fullName,
-        timezone: 'Asia/Kolkata',
-      };
-      
-      console.log('Registration payload:', payload);
-      console.log('API URL:', `${EXPO_PUBLIC_BACKEND_URL}/api/auth/register`);
-
-      const response = await fetch(`${EXPO_PUBLIC_BACKEND_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+        options: {
+          data: {
+            full_name: formData.fullName,
+          }
+        }
       });
 
-      console.log('Registration response status:', response.status);
-      const data = await response.json();
-      console.log('Registration response data:', data);
+      console.log('Supabase registration response:', { data, error });
 
-      if (response.ok) {
-        console.log('Registration successful!');
-        // Store token and user data
-        await AsyncStorage.setItem('session_token', data.access_token);
-        await AsyncStorage.setItem('user_data', JSON.stringify(data.user));
+      if (error) {
+        console.log('Registration failed:', error);
+        Alert.alert('Error', error.message);
+        return;
+      }
+
+      if (data.user && !data.session) {
+        Alert.alert(
+          'Check your email',
+          'Please check your email for the confirmation link to complete registration.',
+          [{ text: 'OK', onPress: () => router.push('/auth/login') }]
+        );
+        return;
+      }
+
+      if (data.session) {
+        console.log('Registration successful with immediate session!');
+        
+        // Create profile record
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            full_name: formData.fullName,
+            email: formData.email.toLowerCase(),
+          });
+
+        if (profileError) {
+          console.warn('Profile creation failed:', profileError);
+        }
 
         Alert.alert(
           'Success',
@@ -115,9 +128,6 @@ export default function Register() {
             },
           ]
         );
-      } else {
-        console.log('Registration failed:', data);
-        Alert.alert('Error', data.detail || 'Registration failed');
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -229,10 +239,7 @@ export default function Register() {
 
             <TouchableOpacity
               style={styles.registerButton}
-              onPress={() => {
-                console.log('Button clicked!');
-                handleRegister();
-              }}
+              onPress={handleRegister}
               disabled={loading}
             >
               {loading ? (
