@@ -67,12 +67,16 @@ def test_health_check():
     print("🔍 Testing Health Check Endpoints...")
     
     # Test root endpoint (no /api prefix)
+    print(f"Testing root endpoint: {BACKEND_URL}/")
     response = make_request("GET", "", auth_required=False)
     if response is None:
         # Try direct URL without /api
         try:
+            print("Trying direct URL...")
             response = requests.get(f"{BACKEND_URL}/", timeout=30)
-        except:
+            print(f"Direct response status: {response.status_code}")
+        except Exception as e:
+            print(f"Direct request failed: {e}")
             response = None
     
     if response and response.status_code == 200:
@@ -83,12 +87,16 @@ def test_health_check():
         print_test_result("Root endpoint", False, f"Failed to connect or bad status: {response.status_code if response else 'No response'}")
     
     # Test health endpoint (no /api prefix)
+    print(f"Testing health endpoint: {BACKEND_URL}/health")
     response = make_request("GET", "/health", auth_required=False)
     if response is None:
         # Try direct URL without /api
         try:
+            print("Trying direct health URL...")
             response = requests.get(f"{BACKEND_URL}/health", timeout=30)
-        except:
+            print(f"Direct health response status: {response.status_code}")
+        except Exception as e:
+            print(f"Direct health request failed: {e}")
             response = None
     
     if response and response.status_code == 200:
