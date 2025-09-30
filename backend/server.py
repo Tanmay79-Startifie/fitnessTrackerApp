@@ -367,15 +367,19 @@ async def register(user_data: UserCreate):
         if response.user is None:
             raise HTTPException(status_code=400, detail="Registration failed")
         
-        # Create user profile
-        profile_data = {
-            "id": response.user.id,
-            "full_name": user_data.full_name,
-            "email": user_data.email,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        
-        supabase.table("profiles").insert(profile_data).execute()
+        # Try to create user profile, but don't fail if table doesn't exist
+        try:
+            profile_data = {
+                "id": response.user.id,
+                "full_name": user_data.full_name,
+                "email": user_data.email,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            supabase.table("profiles").insert(profile_data).execute()
+        except Exception as profile_error:
+            # Log the error but don't fail registration
+            print(f"Profile creation failed: {profile_error}")
         
         return {
             "access_token": response.session.access_token if response.session else None,
