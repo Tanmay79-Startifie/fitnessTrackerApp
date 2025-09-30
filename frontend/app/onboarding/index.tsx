@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../lib/AuthContext';
 
 // Import section components
 import BasicInfoSection from './sections/BasicInfoSection';
