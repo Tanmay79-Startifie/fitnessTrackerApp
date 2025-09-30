@@ -495,10 +495,15 @@ def generate_fallback_workout(profile_data: dict) -> dict:
 async def register(user_data: UserCreate):
     """Register a new user with Supabase Auth"""
     try:
-        # Create user with Supabase Auth
+        # Create user with Supabase Auth (use proper options format)
         response = supabase.auth.sign_up({
-            "email": user_data.email,
-            "password": user_data.password
+            "email": user_data.email.strip().lower(),
+            "password": user_data.password,
+            "options": {
+                "data": {
+                    "full_name": user_data.full_name
+                }
+            }
         })
         
         if response.user is None:
