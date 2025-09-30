@@ -868,6 +868,11 @@ async def get_today_tasks(request: Request):
                 await db.tasks.insert_many([task.dict() for task in tasks])
                 return [task.dict() for task in tasks]
     
+    # Remove ObjectId from tasks
+    for task in tasks:
+        if "_id" in task:
+            del task["_id"]
+    
     return tasks
 
 @api_router.put("/tasks/{task_id}")
