@@ -822,10 +822,18 @@ async def get_today_plan(request: Request):
         if not profile:
             raise HTTPException(status_code=404, detail="Profile not found. Please complete onboarding.")
         
+        # Remove ObjectId before creating profile object
+        if "_id" in profile:
+            del profile["_id"]
+        
         profile_obj = UserProfile(**profile)
         plan = await generate_daily_plan(user["id"], today, profile_obj)
         await db.daily_plans.insert_one(plan.dict())
         return plan.dict()
+    
+    # Remove ObjectId from existing plan
+    if "_id" in plan:
+        del plan["_id"]
     
     return plan
 
