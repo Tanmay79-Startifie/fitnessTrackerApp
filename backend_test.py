@@ -137,7 +137,13 @@ def test_user_registration():
                          f"User ID: {user_id}, Email: {user_info.get('email')}, Token: {'Yes' if access_token else 'None (email confirmation required)'}")
         return success
     else:
-        error_detail = response.json().get("detail", "Unknown error") if response else "No response"
+        if response:
+            try:
+                error_detail = response.json().get("detail", "Unknown error")
+            except:
+                error_detail = response.text
+        else:
+            error_detail = "No response"
         print_test_result("User registration with Supabase", False, 
                          f"Status: {response.status_code if response else 'No response'}, Error: {error_detail}")
         return False
