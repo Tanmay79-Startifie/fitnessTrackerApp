@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "total_tests": 13,
+    "passed": 9,
+    "failed": 4,
+    "success_rate": 69.23076923076923
+  },
+  "results": [
+    {
+      "test": "Authentication - Register",
+      "success": true,
+      "message": "User registered successfully",
+      "details": {
+        "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
+        "email": "fitness.test.user@example.com",
+        "token_type": "bearer"
+      },
+      "timestamp": "2025-09-30T08:33:24.236545"
+    },
+    {
+      "test": "Authentication - Login",
+      "success": true,
+      "message": "Login successful",
+      "details": {
+        "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
+        "email": "fitness.test.user@example.com"
+      },
+      "timestamp": "2025-09-30T08:33:24.477010"
+    },
+    {
+      "test": "Authentication - Get Current User",
+      "success": true,
+      "message": "User info retrieved successfully",
+      "details": {
+        "id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
+        "email": "fitness.test.user@example.com",
+        "full_name": "Fitness Test User",
+        "photo_url": null,
+        "timezone": "Asia/Kolkata",
+        "auth_provider": "email"
+      },
+      "timestamp": "2025-09-30T08:33:24.526525"
+    },
+    {
+      "test": "Authentication - Invalid Credentials",
+      "success": true,
+      "message": "Invalid credentials properly rejected",
+      "details": null,
+      "timestamp": "2025-09-30T08:33:36.031550"
+    },
+    {
+      "test": "Onboarding - Complete Process",
+      "success": true,
+      "message": "Onboarding completed with correct calculations",
+      "details": {
+        "bmi": 24.5,
+        "bmr": 1698.8,
+        "tdee": 2633.1,
+        "calories_target": 2238.0,
+        "macros": {
+          "protein_g": 150.0,
+          "carbs_g": 255.7,
+          "fat_g": 68.4
+        }
+      },
+      "timestamp": "2025-09-30T08:33:36.100309"
+    },
+    {
+      "test": "Onboarding - Status Check",
+      "success": true,
+      "message": "Onboarding status correct",
+      "details": {
+        "completed": true,
+        "has_profile": true
+      },
+      "timestamp": "2025-09-30T08:33:36.109661"
+    },
+    {
+      "test": "Daily Plan - Today's Plan",
+      "success": false,
+      "message": "Daily plan failed with status 500",
+      "details": "Internal Server Error",
+      "timestamp": "2025-09-30T08:33:36.117914"
+    },
+    {
+      "test": "Task Management - Today's Tasks",
+      "success": true,
+      "message": "Tasks generated successfully",
+      "details": {
+        "task_count": 7,
+        "task_types": [
+          "meal",
+          "workout",
+          "water",
+          "sleep"
+        ]
+      },
+      "timestamp": "2025-09-30T08:33:36.143990"
+    },
+    {
+      "test": "Task Management - Update Task",
+      "success": false,
+      "message": "Task update failed with status 500",
+      "details": "Internal Server Error",
+      "timestamp": "2025-09-30T08:33:36.166524"
+    },
+    {
+      "test": "Profile Management - Get Profile",
+      "success": false,
+      "message": "Profile get failed with status 500",
+      "details": "Internal Server Error",
+      "timestamp": "2025-09-30T08:33:36.174644"
+    },
+    {
+      "test": "Profile Management - Photo Upload",
+      "success": true,
+      "message": "Photo uploaded and compressed successfully",
+      "details": {
+        "photo_url_length": 119,
+        "format": "base64 data URL"
+      },
+      "timestamp": "2025-09-30T08:33:36.188241"
+    },
+    {
+      "test": "Progress Tracking - Summary",
+      "success": false,
+      "message": "Progress summary failed with status 500",
+      "details": "Internal Server Error",
+      "timestamp": "2025-09-30T08:33:36.194714"
+    },
+    {
+      "test": "Security - Unauthorized Access",
+      "success": true,
+      "message": "All 4 protected endpoints properly reject unauthorized access",
+      "details": null,
+      "timestamp": "2025-09-30T08:33:43.091260"
+    }
+  ],
+  "timestamp": "2025-09-30T08:33:43.091406"
+}
