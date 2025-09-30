@@ -119,7 +119,9 @@ def test_user_registration():
     global access_token, user_id
     print("🔍 Testing Supabase User Registration...")
     
+    print(f"Registering user: {TEST_USER}")
     response = make_request("POST", "/auth/register", TEST_USER, auth_required=False)
+    print(f"Registration response: {response}")
     
     if response and response.status_code == 200:
         data = response.json()
