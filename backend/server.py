@@ -969,7 +969,7 @@ async def update_user_progress(user_id: str, task_id: str):
     update_data = {}
     
     if task["type"] == "meal":
-        current_meals = progress.get("meals_completed") or 0
+        current_meals = progress.get("meals_completed", 0) or 0
         update_data["meals_completed"] = current_meals + 1
     elif task["type"] == "workout":
         update_data["workouts_minutes"] = 30  # Default workout duration
