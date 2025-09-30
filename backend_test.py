@@ -66,8 +66,15 @@ def test_health_check():
     """Test basic health endpoints"""
     print("🔍 Testing Health Check Endpoints...")
     
-    # Test root endpoint
+    # Test root endpoint (no /api prefix)
     response = make_request("GET", "", auth_required=False)
+    if response is None:
+        # Try direct URL without /api
+        try:
+            response = requests.get(f"{BACKEND_URL}/", timeout=30)
+        except:
+            response = None
+    
     if response and response.status_code == 200:
         data = response.json()
         success = "AI Fitness Tracker API" in data.get("message", "")
@@ -75,8 +82,15 @@ def test_health_check():
     else:
         print_test_result("Root endpoint", False, f"Failed to connect or bad status: {response.status_code if response else 'No response'}")
     
-    # Test health endpoint
+    # Test health endpoint (no /api prefix)
     response = make_request("GET", "/health", auth_required=False)
+    if response is None:
+        # Try direct URL without /api
+        try:
+            response = requests.get(f"{BACKEND_URL}/health", timeout=30)
+        except:
+            response = None
+    
     if response and response.status_code == 200:
         data = response.json()
         success = data.get("status") == "healthy"
