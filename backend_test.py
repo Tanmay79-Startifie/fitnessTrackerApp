@@ -42,12 +42,14 @@ def make_request(method, endpoint, data=None, headers=None, auth_required=True):
     # Handle root endpoint specially
     if endpoint == "":
         url = BACKEND_URL + "/"
-    elif endpoint.startswith("/") and not endpoint.startswith("/api"):
+    elif endpoint.startswith("/") and not endpoint.startswith("/api") and endpoint in ["/health"]:
         # For non-API endpoints like /health
         url = BACKEND_URL + endpoint
     else:
-        # For API endpoints
-        url = f"{API_BASE}{endpoint}"
+        # For API endpoints - ensure they start with /api
+        if not endpoint.startswith("/api"):
+            endpoint = "/api" + endpoint
+        url = BACKEND_URL + endpoint
     
     # Add authorization header if required
     if auth_required and access_token:
