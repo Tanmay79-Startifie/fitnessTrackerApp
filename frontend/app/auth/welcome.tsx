@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   Text, 
@@ -6,20 +6,36 @@ import {
   TouchableOpacity, 
   SafeAreaView,
   StatusBar,
-  Linking
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+import { supabase } from '../../lib/supabase';
 
 export default function Welcome() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleGoogleSignIn = () => {
-    const redirectUrl = encodeURIComponent(`${EXPO_PUBLIC_BACKEND_URL}/`);
-    const authUrl = `https://auth.emergentagent.com/?redirect=${redirectUrl}`;
-    Linking.openURL(authUrl);
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+
+      if (error) {
+        Alert.alert('Error', error.message);
+        return;
+      }
+
+      console.log('Google sign-in initiated:', data);
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      Alert.alert('Error', 'Failed to sign in with Google. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEmailSignIn = () => {
