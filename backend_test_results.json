@@ -1,9 +1,9 @@
 {
   "summary": {
     "total_tests": 13,
-    "passed": 12,
-    "failed": 1,
-    "success_rate": 92.3076923076923
+    "passed": 13,
+    "failed": 0,
+    "success_rate": 100.0
   },
   "results": [
     {
@@ -11,7 +11,7 @@
       "success": true,
       "message": "User already exists, logged in successfully",
       "details": {
-        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTgyNzQyNi1lNWRhLTRiOWUtYjY4NC1kZGZhZTMyODJiOWMiLCJleHAiOjE3NjE4MTMzNDR9.vP_XmhJO8ZNfdIf3z4V6Um3jWj34DyEtojAhYK9sZyE",
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTgyNzQyNi1lNWRhLTRiOWUtYjY4NC1kZGZhZTMyODJiOWMiLCJleHAiOjE3NjE4MTM0MDZ9.4QUIUM_UeleqrG403wTfLzaDejs6-0Ol4Y4kieGw0Bs",
         "token_type": "bearer",
         "user": {
           "id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
@@ -20,7 +20,7 @@
           "timezone": "Asia/Kolkata"
         }
       },
-      "timestamp": "2025-09-30T08:35:44.409822"
+      "timestamp": "2025-09-30T08:36:46.770842"
     },
     {
       "test": "Authentication - Login",
@@ -30,7 +30,7 @@
         "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
         "email": "fitness.test.user@example.com"
       },
-      "timestamp": "2025-09-30T08:35:44.652168"
+      "timestamp": "2025-09-30T08:36:47.043687"
     },
     {
       "test": "Authentication - Get Current User",
@@ -44,14 +44,14 @@
         "timezone": "Asia/Kolkata",
         "auth_provider": "email"
       },
-      "timestamp": "2025-09-30T08:35:44.664137"
+      "timestamp": "2025-09-30T08:36:47.090283"
     },
     {
       "test": "Authentication - Invalid Credentials",
       "success": true,
       "message": "Invalid credentials properly rejected",
       "details": null,
-      "timestamp": "2025-09-30T08:35:44.904770"
+      "timestamp": "2025-09-30T08:36:47.362318"
     },
     {
       "test": "Onboarding - Complete Process",
@@ -68,7 +68,7 @@
           "fat_g": 68.4
         }
       },
-      "timestamp": "2025-09-30T08:35:44.920023"
+      "timestamp": "2025-09-30T08:36:47.411299"
     },
     {
       "test": "Onboarding - Status Check",
@@ -78,7 +78,7 @@
         "completed": true,
         "has_profile": true
       },
-      "timestamp": "2025-09-30T08:35:44.930607"
+      "timestamp": "2025-09-30T08:36:47.459367"
     },
     {
       "test": "Daily Plan - Today's Plan",
@@ -91,7 +91,7 @@
         "calories_target": 2238.0,
         "water_goal_ml": 3400.0
       },
-      "timestamp": "2025-09-30T08:35:44.945949"
+      "timestamp": "2025-09-30T08:36:47.465320"
     },
     {
       "test": "Task Management - Today's Tasks",
@@ -106,14 +106,17 @@
           "workout"
         ]
       },
-      "timestamp": "2025-09-30T08:35:44.956486"
+      "timestamp": "2025-09-30T08:36:47.471122"
     },
     {
       "test": "Task Management - Update Task",
-      "success": false,
-      "message": "Task update failed with status 500",
-      "details": "Internal Server Error",
-      "timestamp": "2025-09-30T08:35:44.968384"
+      "success": true,
+      "message": "Task updated successfully",
+      "details": {
+        "task_id": "7dcb717c-8c1a-4151-8af8-b3229bdf0b83",
+        "completed": true
+      },
+      "timestamp": "2025-09-30T08:36:47.525293"
     },
     {
       "test": "Profile Management - Get Profile",
@@ -125,7 +128,7 @@
         "calories_target": 2238.0,
         "primary_goal": "Lose weight"
       },
-      "timestamp": "2025-09-30T08:35:44.981950"
+      "timestamp": "2025-09-30T08:36:47.571315"
     },
     {
       "test": "Profile Management - Photo Upload",
@@ -135,7 +138,7 @@
         "photo_url_length": 119,
         "format": "base64 data URL"
       },
-      "timestamp": "2025-09-30T08:35:44.997513"
+      "timestamp": "2025-09-30T08:36:47.622466"
     },
     {
       "test": "Progress Tracking - Summary",
@@ -143,18 +146,18 @@
       "message": "Progress summary retrieved successfully",
       "details": {
         "weekly_workouts": 0,
-        "total_meals_completed": 0,
+        "total_meals_completed": 2,
         "current_streak": 5
       },
-      "timestamp": "2025-09-30T08:35:45.008140"
+      "timestamp": "2025-09-30T08:36:47.669242"
     },
     {
       "test": "Security - Unauthorized Access",
       "success": true,
       "message": "All 4 protected endpoints properly reject unauthorized access",
       "details": null,
-      "timestamp": "2025-09-30T08:35:45.125941"
+      "timestamp": "2025-09-30T08:36:47.850374"
     }
   ],
-  "timestamp": "2025-09-30T08:35:45.126091"
+  "timestamp": "2025-09-30T08:36:47.850534"
 }
