@@ -146,13 +146,7 @@ export default function OnboardingWizard() {
   const handleSubmit = async () => {
     console.log('=== SUPABASE ONBOARDING SUBMIT STARTED ===');
     console.log('Current data:', data);
-    console.log('Current user:', user);
-    
-    if (!user) {
-      Alert.alert('Error', 'User not authenticated. Please log in again.');
-      router.replace('/auth/welcome');
-      return;
-    }
+    // Check authentication - get current user from session
 
     setLoading(true);
     try {
