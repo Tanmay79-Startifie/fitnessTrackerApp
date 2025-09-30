@@ -105,20 +105,23 @@
 user_problem_statement: "Build a complete Android fitness-tracker app end-to-end using Expo + FastAPI + MongoDB. Support Google Sign-In and Email/Password authentication. 4-section onboarding wizard, BMI/BMR/TDEE calculations, personalized daily meal/workout/water/sleep targets, progress tracking and streaks, profile management. **ARCHITECTURE MIGRATED TO: Expo + Supabase + Gemini AI**"
 
 backend:
-  - task: "Authentication System (Email/Password + Google OAuth)"
+  - task: "Authentication System (MIGRATED TO SUPABASE AUTH)"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Implemented complete authentication system with JWT, Google OAuth integration via Emergent Auth, password hashing, session management"
+        comment: "OLD SYSTEM: Implemented complete authentication system with JWT, Google OAuth integration via Emergent Auth, password hashing, session management"
       - working: true
         agent: "testing"
-        comment: "✅ COMPREHENSIVE TESTING PASSED: All authentication endpoints working correctly. Tested registration, login, token validation, and invalid credentials handling. JWT tokens properly generated and validated. Error handling for unauthorized access working as expected."
+        comment: "OLD SYSTEM: ✅ COMPREHENSIVE TESTING PASSED: All authentication endpoints working correctly. Tested registration, login, token validation, and invalid credentials handling. JWT tokens properly generated and validated. Error handling for unauthorized access working as expected."
+      - working: "NA"
+        agent: "main"
+        comment: "MIGRATED TO SUPABASE: Backend completely rewritten to use Supabase Auth for user management. No longer handles JWT tokens directly - delegates to Supabase auth system. Needs retesting with new architecture."
 
   - task: "Onboarding API with BMI/BMR/TDEE Calculations"
     implemented: true
