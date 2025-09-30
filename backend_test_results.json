@@ -1,21 +1,26 @@
 {
   "summary": {
     "total_tests": 13,
-    "passed": 9,
-    "failed": 4,
-    "success_rate": 69.23076923076923
+    "passed": 12,
+    "failed": 1,
+    "success_rate": 92.3076923076923
   },
   "results": [
     {
       "test": "Authentication - Register",
       "success": true,
-      "message": "User registered successfully",
+      "message": "User already exists, logged in successfully",
       "details": {
-        "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
-        "email": "fitness.test.user@example.com",
-        "token_type": "bearer"
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTgyNzQyNi1lNWRhLTRiOWUtYjY4NC1kZGZhZTMyODJiOWMiLCJleHAiOjE3NjE4MTMzNDR9.vP_XmhJO8ZNfdIf3z4V6Um3jWj34DyEtojAhYK9sZyE",
+        "token_type": "bearer",
+        "user": {
+          "id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
+          "email": "fitness.test.user@example.com",
+          "full_name": "Fitness Test User",
+          "timezone": "Asia/Kolkata"
+        }
       },
-      "timestamp": "2025-09-30T08:33:24.236545"
+      "timestamp": "2025-09-30T08:35:44.409822"
     },
     {
       "test": "Authentication - Login",
@@ -25,7 +30,7 @@
         "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
         "email": "fitness.test.user@example.com"
       },
-      "timestamp": "2025-09-30T08:33:24.477010"
+      "timestamp": "2025-09-30T08:35:44.652168"
     },
     {
       "test": "Authentication - Get Current User",
@@ -35,18 +40,18 @@
         "id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
         "email": "fitness.test.user@example.com",
         "full_name": "Fitness Test User",
-        "photo_url": null,
+        "photo_url": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg==",
         "timezone": "Asia/Kolkata",
         "auth_provider": "email"
       },
-      "timestamp": "2025-09-30T08:33:24.526525"
+      "timestamp": "2025-09-30T08:35:44.664137"
     },
     {
       "test": "Authentication - Invalid Credentials",
       "success": true,
       "message": "Invalid credentials properly rejected",
       "details": null,
-      "timestamp": "2025-09-30T08:33:36.031550"
+      "timestamp": "2025-09-30T08:35:44.904770"
     },
     {
       "test": "Onboarding - Complete Process",
@@ -63,7 +68,7 @@
           "fat_g": 68.4
         }
       },
-      "timestamp": "2025-09-30T08:33:36.100309"
+      "timestamp": "2025-09-30T08:35:44.920023"
     },
     {
       "test": "Onboarding - Status Check",
@@ -73,14 +78,20 @@
         "completed": true,
         "has_profile": true
       },
-      "timestamp": "2025-09-30T08:33:36.109661"
+      "timestamp": "2025-09-30T08:35:44.930607"
     },
     {
       "test": "Daily Plan - Today's Plan",
-      "success": false,
-      "message": "Daily plan failed with status 500",
-      "details": "Internal Server Error",
-      "timestamp": "2025-09-30T08:33:36.117914"
+      "success": true,
+      "message": "Daily plan generated successfully",
+      "details": {
+        "date": "2025-09-30",
+        "meals_count": 4,
+        "workout_duration": 35,
+        "calories_target": 2238.0,
+        "water_goal_ml": 3400.0
+      },
+      "timestamp": "2025-09-30T08:35:44.945949"
     },
     {
       "test": "Task Management - Today's Tasks",
@@ -89,27 +100,32 @@
       "details": {
         "task_count": 7,
         "task_types": [
-          "meal",
-          "workout",
           "water",
-          "sleep"
+          "meal",
+          "sleep",
+          "workout"
         ]
       },
-      "timestamp": "2025-09-30T08:33:36.143990"
+      "timestamp": "2025-09-30T08:35:44.956486"
     },
     {
       "test": "Task Management - Update Task",
       "success": false,
       "message": "Task update failed with status 500",
       "details": "Internal Server Error",
-      "timestamp": "2025-09-30T08:33:36.166524"
+      "timestamp": "2025-09-30T08:35:44.968384"
     },
     {
       "test": "Profile Management - Get Profile",
-      "success": false,
-      "message": "Profile get failed with status 500",
-      "details": "Internal Server Error",
-      "timestamp": "2025-09-30T08:33:36.174644"
+      "success": true,
+      "message": "Profile retrieved successfully",
+      "details": {
+        "user_id": "05827426-e5da-4b9e-b684-ddfae3282b9c",
+        "bmi": 24.5,
+        "calories_target": 2238.0,
+        "primary_goal": "Lose weight"
+      },
+      "timestamp": "2025-09-30T08:35:44.981950"
     },
     {
       "test": "Profile Management - Photo Upload",
@@ -119,22 +135,26 @@
         "photo_url_length": 119,
         "format": "base64 data URL"
       },
-      "timestamp": "2025-09-30T08:33:36.188241"
+      "timestamp": "2025-09-30T08:35:44.997513"
     },
     {
       "test": "Progress Tracking - Summary",
-      "success": false,
-      "message": "Progress summary failed with status 500",
-      "details": "Internal Server Error",
-      "timestamp": "2025-09-30T08:33:36.194714"
+      "success": true,
+      "message": "Progress summary retrieved successfully",
+      "details": {
+        "weekly_workouts": 0,
+        "total_meals_completed": 0,
+        "current_streak": 5
+      },
+      "timestamp": "2025-09-30T08:35:45.008140"
     },
     {
       "test": "Security - Unauthorized Access",
       "success": true,
       "message": "All 4 protected endpoints properly reject unauthorized access",
       "details": null,
-      "timestamp": "2025-09-30T08:33:43.091260"
+      "timestamp": "2025-09-30T08:35:45.125941"
     }
   ],
-  "timestamp": "2025-09-30T08:33:43.091406"
+  "timestamp": "2025-09-30T08:35:45.126091"
 }
