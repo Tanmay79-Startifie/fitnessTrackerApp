@@ -144,9 +144,13 @@ export default function OnboardingWizard() {
   };
 
   const handleSubmit = async () => {
+    console.log('=== ONBOARDING SUBMIT STARTED ===');
+    console.log('Current data:', data);
+    
     setLoading(true);
     try {
       const token = await AsyncStorage.getItem('session_token');
+      console.log('Token found:', !!token);
       
       if (!token) {
         throw new Error('No authentication token found');
@@ -177,6 +181,9 @@ export default function OnboardingWizard() {
         training_days: data.trainingDays,
       };
 
+      console.log('Onboarding payload:', onboardingPayload);
+      console.log('API URL:', `${EXPO_PUBLIC_BACKEND_URL}/api/onboarding`);
+
       const response = await fetch(`${EXPO_PUBLIC_BACKEND_URL}/api/onboarding`, {
         method: 'POST',
         headers: {
@@ -186,16 +193,22 @@ export default function OnboardingWizard() {
         body: JSON.stringify(onboardingPayload),
       });
 
+      console.log('Response status:', response.status);
       const result = await response.json();
+      console.log('Response result:', result);
 
       if (response.ok) {
+        console.log('Onboarding successful, navigating to dashboard...');
         Alert.alert(
           'Profile Complete!',
           'Your personalized fitness plan is ready.',
           [
             {
               text: 'Get Started',
-              onPress: () => router.replace('/dashboard'),
+              onPress: () => {
+                console.log('Navigating to dashboard...');
+                router.replace('/dashboard');
+              },
             },
           ]
         );
