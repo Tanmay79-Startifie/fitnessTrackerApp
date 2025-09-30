@@ -12,7 +12,6 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../lib/AuthContext';
 
 // Import section components
 import BasicInfoSection from './sections/BasicInfoSection';
