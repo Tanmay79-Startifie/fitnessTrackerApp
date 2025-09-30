@@ -229,7 +229,10 @@ export default function Register() {
 
             <TouchableOpacity
               style={styles.registerButton}
-              onPress={handleRegister}
+              onPress={() => {
+                console.log('Button clicked!');
+                handleRegister();
+              }}
               disabled={loading}
             >
               {loading ? (
