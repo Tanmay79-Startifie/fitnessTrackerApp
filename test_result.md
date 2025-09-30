@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Build a complete Android fitness-tracker app end-to-end using Expo + FastAPI + MongoDB. Support Google Sign-In and Email/Password authentication. 4-section onboarding wizard, BMI/BMR/TDEE calculations, personalized daily meal/workout/water/sleep targets, progress tracking and streaks, profile management."
+user_problem_statement: "Build a complete Android fitness-tracker app end-to-end using Expo + FastAPI + MongoDB. Support Google Sign-In and Email/Password authentication. 4-section onboarding wizard, BMI/BMR/TDEE calculations, personalized daily meal/workout/water/sleep targets, progress tracking and streaks, profile management. **ARCHITECTURE MIGRATED TO: Expo + Supabase + Gemini AI**"
 
 backend:
   - task: "Authentication System (Email/Password + Google OAuth)"
