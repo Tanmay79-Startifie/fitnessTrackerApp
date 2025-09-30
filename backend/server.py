@@ -20,8 +20,11 @@ load_dotenv(ROOT_DIR / '.env')
 
 # Supabase connection
 supabase_url = os.environ['SUPABASE_URL']
-supabase_key = os.environ['SUPABASE_SERVICE_ROLE_KEY']
-supabase: Client = create_client(supabase_url, supabase_key)
+supabase_anon_key = os.environ['SUPABASE_PUBLISHABLE_KEY']
+supabase_service_key = os.environ['SUPABASE_SERVICE_ROLE_KEY']
+
+# Use anon key for auth operations, service key for admin operations
+supabase: Client = create_client(supabase_url, supabase_anon_key)
 
 # Gemini AI initialization
 gemini_api_key = os.environ['GEMINI_API_KEY'] 
