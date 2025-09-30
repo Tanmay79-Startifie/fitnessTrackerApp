@@ -12,7 +12,7 @@ from datetime import datetime, date
 from typing import Dict, Any, Optional
 
 # Configuration
-BASE_URL = "https://kotlin-fitness.preview.emergentagent.com/api"
+BASE_URL = "https://geminihealth.preview.emergentagent.com/api"
 TEST_USER_EMAIL = "fitness.test.user@example.com"
 TEST_USER_PASSWORD = "SecureTestPass123!"
 TEST_USER_NAME = "Fitness Test User"

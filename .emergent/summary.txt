@@ -1,0 +1,71 @@
+<analysis>
+The project began with a detailed specification for a native Android fitness application using a Kotlin and Firebase stack. A crucial initial step involved clarifying a platform mismatch, leading to a pivot towards the environment's supported stack: Expo (React Native), FastAPI, and MongoDB. The AI engineer successfully implemented a substantial portion of the application, including user authentication (Email/Password, Google OAuth), a comprehensive multi-step onboarding wizard, and foundational screens for the dashboard, profile, and plans.
+
+Development hit a significant roadblock when the user reported a critical bug where the Complete Setup button in the onboarding flow was non-functional. While in the process of debugging this frontend issue, the user issued a directive for a major architectural overhaul.
+
+This second major pivot involved migrating the entire backend and database from FastAPI and MongoDB to Supabase for authentication and data persistence, and integrating Google's Gemini AI for generating personalized meal and workout plans. The AI engineer successfully installed the new dependencies, updated environment variables with the user-provided credentials, rewrote the entire Python backend to interface with Supabase and Gemini, and created a new SQL schema. The project is currently paused mid-migration, with the backend refactored but the frontend yet to be updated.
+</analysis>
+<product_requirements>
+The goal is to build a comprehensive mobile fitness tracking application for iOS and Android. The application guides users through a multi-section onboarding process, collecting personal, lifestyle, and fitness data.
+
+Based on this data, the app will use the Gemini AI to generate personalized daily plans, including meal suggestions (respecting dietary preferences like veg/non-veg and allergies), workout routines, and targets for water intake and sleep.
+
+The main Today screen will feature a checklist of daily tasks (meals, workout) with progress indicators. The app must track user progress over time with charts, manage streaks, and allow profile customization.
+
+Key features include:
+- **Authentication:** Supabase-based Email/Password and Google OAuth.
+- **Onboarding:** A 4-section wizard to collect user data.
+- **Personalization:** Daily plan generation powered by Gemini AI.
+- **Tracking:** A dashboard to view and complete daily tasks, and a progress section with charts.
+- **Notifications:** Push notifications for reminders (meals, workouts, water).
+- **Settings:** Profile management, editable preferences (units, timezone), and notification controls.
+</product_requirements>
+<key_technical_concepts>
+- **Frontend:** Expo (React Native), expo-router for file-based routing.
+- **Backend:** Python server interfacing with Supabase and Google Gemini AI.
+- **Database:** Supabase (PostgreSQL) for all data storage.
+- **Authentication:** Supabase Auth for user management (Email/Password, Google OAuth).
+- **AI Integration:** Google Gemini for personalized content generation.
+</key_technical_concepts>
+<code_architecture>
+The project is structured as a monorepo with a  Expo application and a  Python server. The initial architecture based on FastAPI/MongoDB was completely replaced.
+
+**Directory Structure:**
+
+
+- ****
+  - **Importance:** This file was the heart of the business logic.
+  - **Changes:** It has been completely rewritten from a FastAPI/MongoDB/JWT implementation to a new version that acts as an interface to Supabase (for database operations) and Gemini AI (for plan generation). It no longer handles authentication directly, delegating that to Supabase.
+
+- ****
+  - **Importance:** This new file defines the entire database structure for the application on Supabase. It is the source of truth for all tables, columns, and relationships, replacing the previous Pydantic models for MongoDB.
+
+- ****
+  - **Importance:** This directory contains all the user-facing screens built with React Native and routed using expo-router.
+  - **Changes:** Multiple screens for authentication, onboarding, and the main app dashboard were created. However, their internal logic for API calls and state management is now obsolete as it points to the old FastAPI backend. These files require a complete overhaul to integrate with the new Supabase client.
+
+- ** files (both frontend and backend)**
+  - **Importance:** These files store critical environment variables and credentials.
+  - **Changes:** They were updated to remove MongoDB variables and add the necessary Supabase and Gemini AI API keys and URLs provided by the user.
+
+</code_architecture>
+<pending_tasks>
+- **Frontend Migration to Supabase:** The entire frontend needs to be refactored. This includes:
+  - Implementing a Supabase client helper/provider.
+  - Rewriting all authentication screens (, ) to use .
+  - Updating all data-fetching logic in screens like , , and  to query Supabase instead of the old API endpoints.
+</pending_tasks>
+<current_work>
+The project is in the middle of a major architectural migration requested by the user. The previous AI engineer was debugging a critical bug in the onboarding flow of an Expo + FastAPI + MongoDB application. However, work was interrupted by a new directive to switch technologies entirely.
+
+The current state is as follows:
+1.  **Backend Migration Complete:** The  file has been completely rewritten. The original FastAPI application that connected to MongoDB has been replaced with a new Python server that uses the  and  libraries. It now serves as a backend-for-frontend that orchestrates calls to Supabase and Gemini AI.
+2.  **Database Schema Defined:** A new file, , has been created. This file contains the SQL statements to set up the required tables (, , , etc.) in the Supabase PostgreSQL database.
+3.  **Dependencies Installed:** All necessary Python packages (, ) and Node.js packages () for the new architecture have been installed in the backend and frontend, respectively.
+4.  **Configuration Updated:** Both  and  have been updated with the user-provided Supabase project URL, API keys, and the Gemini API key.
+
+The immediate task that was about to be started was the modification of the frontend application to align with this new backend architecture. The frontend code is currently non-functional as it still contains logic pointing to the now-defunct FastAPI endpoints.
+</current_work>
+<optional_next_step>
+Create a Supabase client singleton in the frontend and begin updating the authentication flow, starting with the  and  screens to use Supabase Auth.
+</optional_next_step>
