@@ -995,6 +995,11 @@ async def get_progress_summary(request: Request):
     total_meals = sum((p.get("meals_completed") or 0) for p in progress_data)
     avg_water = sum((p.get("water_ml") or 0) for p in progress_data) / max(len(progress_data), 1)
     
+    # Remove ObjectId from progress data
+    for p in progress_data:
+        if "_id" in p:
+            del p["_id"]
+    
     return {
         "weekly_workouts": total_workouts,
         "total_meals_completed": total_meals,
