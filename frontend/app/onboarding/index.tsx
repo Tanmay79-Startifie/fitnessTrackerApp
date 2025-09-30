@@ -83,7 +83,6 @@ export default function OnboardingWizard() {
   const [data, setData] = useState<OnboardingData>(initialData);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
 
   const sections = [
     { title: 'Basic Info', component: BasicInfoSection },
