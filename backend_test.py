@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 """
-Comprehensive Backend API Testing for Fitness Tracker
-Tests all authentication, onboarding, plan generation, task management, and profile endpoints
+Comprehensive Backend API Testing for Supabase + Gemini AI Migration
+Tests the newly migrated backend with Supabase authentication and database integration
 """
 
 import requests
 import json
-import base64
 import time
-from datetime import datetime, date
-from typing import Dict, Any, Optional
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv('/app/frontend/.env')
 
 # Configuration
-BASE_URL = "https://geminihealth.preview.emergentagent.com/api"
-TEST_USER_EMAIL = "fitness.test.user@example.com"
-TEST_USER_PASSWORD = "SecureTestPass123!"
-TEST_USER_NAME = "Fitness Test User"
+BACKEND_URL = os.getenv('EXPO_PUBLIC_BACKEND_URL', 'https://geminihealth.preview.emergentagent.com')
+API_BASE = f"{BACKEND_URL}/api"
+
+# Test user data
+TEST_USER = {
+    "email": f"testuser_{int(time.time())}@example.com",
+    "password": "TestPassword123!",
+    "full_name": "John Doe"
+}
 
 class FitnessTrackerAPITester:
     def __init__(self):
